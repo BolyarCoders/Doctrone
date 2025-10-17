@@ -3,21 +3,37 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv()
+from flask import Flask, request, jsonify
+app = Flask(__name__)
 
-os.environ["GEMINI_API_KEY"] = os.getenv("GEMINI_KEY")
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel(model_name="gemini-2.5-flash")
 
+drugs = "aspirin, paracetamol"
+intake = "2 times a day"
+dosage = "500mg"
+sex = "male"
+age = "17 years old"
+
 system_instruction = (
-    "Вие сте Джарвис, полезен и информативен AI асистент. "
+    f"You are DoctroneAI. Your goal is to assist users by providing medical information and advice. "
+    f"If the patient reports any issues or symptoms, evaluate them considering the following details: "
+    f"current medications ({drugs}), intake frequency ({intake}), dosage ({dosage}), gender ({sex}), and age ({age}). "
+    "Be concise and clear in your responses."
 )
 
-chat = model.start_chat(history=[{"role": "user","parts": [system_instruction],}])
+@app.post("/chat")
+def chat_endpoint():
+    user_input = request.json.get("message", "")
 
-user_input = "Какво е времето днес в София?"
+    chat = model.start_chat(history=[{"role": "user","parts": [system_instruction],}])
+    result = chat.send_message({"parts": [user_input]})
 
-result = chat.send_message({"parts": [user_input]})
+    print(result.text)
+    return jsonify({"response": result.text})
 
-print("Джарвис: ", result.text)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
