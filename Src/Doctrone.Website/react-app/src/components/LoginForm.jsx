@@ -15,7 +15,7 @@ const LoginForm = ({ onLogin, onToggleForm }) => {
 
     try {
       const response = await fetch(
-        `https://doctroneapi.onrender.com/Doctrone/Login?email=nigger@black&password=nigger`,
+        `https://doctroneapi.onrender.com/Doctrone/Login?email=${email}&password=${password}`,
         {
           method: 'POST',
           headers: {

@@ -376,7 +376,44 @@ p { font-size: var(--p); }
     transition: opacity 0.3s;
 }
 
-.send-btn:hover {
+.send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.prompt-input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.logout-btn {
+    background: #ff4444;
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: var(--p);
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.logout-btn:hover {
     opacity: 0.9;
 }
 

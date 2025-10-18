@@ -41,6 +41,7 @@ const PromptBar = ({ onSend, disabled }) => {
         onClick={handleSend}
         disabled={isLoading || disabled || !message.trim()}
       >
+        {isLoading && <span className="loading-spinner"></span>}
         {isLoading ? "Sending..." : "Send"}
       </button>
     </div>
