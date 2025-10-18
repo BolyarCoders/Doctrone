@@ -1,4 +1,5 @@
 flask
+flask-core
 python-dotenv
 google-generativeai
 supabase
