@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="28b35c46-30ff-4ab4-ba09-3e1c50a4902a" name="Changes" comment="innitial commit from ai part">
-      <change afterPath="$PROJECT_DIR$/Src/Doctrone.AI/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Src/Doctrone.AI/.env" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Doctrone.AI/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Src/Doctrone.AI/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Src/Doctrone.AI/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
