@@ -1,7 +1,6 @@
 import React from "react";
 import { AppContext, useAppContext } from "./context/AppContext";
 import { useState } from "react";
-import "./App.css";
 import mockUser from "./data/users";
 import styles from "./styles.js";
 import Landing from "./pages/Landing.jsx";
@@ -12,7 +11,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [theme, setTheme] = useState("dark");
-  const [user] = useState(mockUser);
+  const [user, setUser] = useState(mockUser);
 
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
@@ -28,6 +27,7 @@ const App = () => {
         theme,
         setTheme,
         user,
+        setUser,
       }}
     >
       <style>{styles}</style>

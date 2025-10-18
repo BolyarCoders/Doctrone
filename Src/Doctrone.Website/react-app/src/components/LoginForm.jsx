@@ -10,7 +10,7 @@ const LoginForm = ({ onLogin, onToggleForm }) => {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
+    <div className="auth-form">
       <h2 style={{ marginBottom: "1.5rem" }}>Login</h2>
       <div className="form-group">
         <label>Email</label>
@@ -32,7 +32,7 @@ const LoginForm = ({ onLogin, onToggleForm }) => {
           required
         />
       </div>
-      <button type="submit" className="btn">
+      <button type="button" className="btn" onClick={handleSubmit}>
         Login
       </button>
       <div className="auth-toggle">
@@ -41,7 +41,7 @@ const LoginForm = ({ onLogin, onToggleForm }) => {
           Register
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 export default LoginForm;

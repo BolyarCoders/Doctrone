@@ -14,7 +14,10 @@ const Sidebar = ({
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
-        <h3>Conversations</h3>
+        <div className="sidebar-logo">
+          {/* SVG icon placeholder - user will insert later */}
+          📋
+        </div>
         <button className="sidebar-toggle" onClick={onToggle}>
           {isCollapsed ? "→" : "←"}
         </button>
@@ -79,4 +82,40 @@ const Sidebar = ({
     </div>
   );
 };
+
+// Prompt Bar Component
+const PromptBar = ({ onSend }) => {
+  const [message, setMessage] = useState("");
+
+  const handleSend = () => {
+    if (message.trim()) {
+      onSend(message);
+      setMessage("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="prompt-bar">
+      <input
+        type="text"
+        className="prompt-input"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyPress={handleKeyPress}
+        placeholder="Describe your symptoms..."
+      />
+      <button className="send-btn" onClick={handleSend}>
+        Send
+      </button>
+    </div>
+  );
+};
+
 export default Sidebar;

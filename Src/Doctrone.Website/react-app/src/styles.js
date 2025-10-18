@@ -47,12 +47,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--secondary-colour);
 }
 
-h1 { font-size: var(--h1); }
-h2 { font-size: var(--h2); }
-h3 { font-size: var(--h3); }
-h4 { font-size: var(--h4); }
-h5 { font-size: var(--h5); }
-h6 { font-size: var(--h6); }
+h1 { font-size: clamp(32px, 5vw, var(--h1)); }
+h2 { font-size: clamp(28px, 4vw, var(--h2)); }
+h3 { font-size: clamp(24px, 3.5vw, var(--h3)); }
+h4 { font-size: clamp(20px, 3vw, var(--h4)); }
+h5 { font-size: clamp(18px, 2.5vw, var(--h5)); }
+h6 { font-size: clamp(16px, 2vw, var(--h6)); }
 p { font-size: var(--p); }
 
 /* Landing Page */
@@ -66,10 +66,7 @@ p { font-size: var(--p); }
 }
 
 .landing-header {
-    background: var(--primary-gradient-colour);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--secondary-colour);
     font-size: var(--h2);
     margin-bottom: 1rem;
     text-align: center;
@@ -89,7 +86,7 @@ p { font-size: var(--p); }
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     border: 1px solid var(--border-color);
 }
 
@@ -103,7 +100,8 @@ p { font-size: var(--p); }
     font-weight: 500;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--border-color);
@@ -111,6 +109,13 @@ p { font-size: var(--p); }
     font-size: var(--p);
     background: var(--primary-colour);
     color: var(--secondary-colour);
+    font-family: 'Roboto', sans-serif;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
 .btn {
@@ -174,6 +179,19 @@ p { font-size: var(--p); }
     margin-bottom: 1.5rem;
 }
 
+.sidebar-logo {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-colour);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+}
+
 .sidebar-toggle {
     background: var(--accent-colour);
     border: none;
@@ -234,23 +252,54 @@ p { font-size: var(--p); }
     margin-left: 300px;
     padding: 2rem;
     transition: margin-left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .main-content.expanded {
     margin-left: 0;
 }
 
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
 .toggle-sidebar-btn {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
     background: var(--accent-colour);
     border: none;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 6px;
     cursor: pointer;
-    z-index: 100;
+}
+
+.profile-btn {
+    background: var(--accent-colour);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+
+.profile-btn:hover {
+    opacity: 0.8;
+}
+
+.conversation-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
 }
 
 .conversation {
@@ -261,10 +310,7 @@ p { font-size: var(--p); }
 .conversation-header {
     font-size: var(--h4);
     margin-bottom: 2rem;
-    background: var(--primary-gradient-colour);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--secondary-colour);
 }
 
 .message {
@@ -291,6 +337,49 @@ p { font-size: var(--p); }
     text-transform: uppercase;
 }
 
+.prompt-bar {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.prompt-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--secondary-colour);
+    font-size: var(--p);
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+}
+
+.prompt-input::placeholder {
+    color: var(--secondary-colour);
+    opacity: 0.5;
+}
+
+.send-btn {
+    background: var(--accent-colour);
+    border: none;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: var(--p);
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.send-btn:hover {
+    opacity: 0.9;
+}
+
 /* Profile Page */
 .profile {
     max-width: 800px;
@@ -301,10 +390,7 @@ p { font-size: var(--p); }
 .profile-header {
     font-size: var(--h3);
     margin-bottom: 2rem;
-    background: var(--primary-gradient-colour);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--secondary-colour);
 }
 
 .profile-section {
@@ -321,7 +407,28 @@ p { font-size: var(--p); }
 }
 
 .profile-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
     margin-bottom: 1rem;
+}
+
+.info-item {
+    padding: 0.75rem;
+    background: var(--primary-colour);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.info-label {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 0.25rem;
+    opacity: 0.8;
+}
+
+.info-value {
+    font-size: var(--p);
 }
 
 .medication-list {
@@ -358,14 +465,16 @@ p { font-size: var(--p); }
     font-size: var(--p);
 }
 
-.nav-link {
+.back-link {
     color: var(--accent-colour);
     text-decoration: none;
-    margin-right: 1rem;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.nav-link:hover {
+.back-link:hover {
     text-decoration: underline;
 }
 
