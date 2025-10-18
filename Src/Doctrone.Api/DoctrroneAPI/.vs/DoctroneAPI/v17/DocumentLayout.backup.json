@@ -1,0 +1,184 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\controllers\\doctronecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\controllers\\doctronecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\userregister.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\userregister.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\folder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\folder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\prescriptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\prescriptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\models\\drugs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\models\\drugs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|c:\\users\\merte\\documents\\github\\doctrone\\src\\doctrone.api\\doctrroneapi\\doctrroneapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{23202133-A529-4497-BBC1-F34164876B3F}|DoctrroneAPI\\DoctroneAPI.csproj|solutionrelative:doctrroneapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DoctroneController.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Controllers\\DoctroneController.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Controllers\\DoctroneController.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Controllers\\DoctroneController.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Controllers\\DoctroneController.cs",
+              "ViewState": "AgIAABEBAAAAAAAAAAAuwDIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T08:05:20.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Message.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Message.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Message.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Message.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Message.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T08:04:40.466Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Folder.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Folder.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Folder.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Folder.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Folder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T08:03:43.202Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Chat.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Chat.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Chat.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Chat.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Chat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T08:03:00.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Users.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Users.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Users.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Users.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Users.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T07:52:15.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserRegister.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\UserRegister.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\UserRegister.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\UserRegister.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\UserRegister.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T08:35:51.437Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Prescriptions.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Prescriptions.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Prescriptions.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Prescriptions.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Prescriptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T07:56:06.784Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Drugs.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Drugs.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Models\\Drugs.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Models\\Drugs.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Models\\Drugs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T07:54:31.315Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\appsettings.json",
+              "RelativeToolTip": "DoctrroneAPI\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-18T07:42:54.597Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Program.cs",
+              "RelativeDocumentMoniker": "DoctrroneAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Program.cs",
+              "RelativeToolTip": "DoctrroneAPI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T07:37:55.507Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
