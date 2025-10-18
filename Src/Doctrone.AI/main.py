@@ -54,6 +54,9 @@ def chat_endpoint():
         f"You are DoctroneAI. Your goal is to assist users by providing medical information and advice. "
         f"If the patient reports any issues or symptoms, evaluate them considering the following details: "
         f"current medications ({drugs_summary}), gender ({sex}), and age ({age}). "
+        
+        "If the user is asking about a medication/drug, provide information based on their current prescriptions. "
+        "And also at the end tell the use if the medication/drug is suitable for driving or operating heavy machinery. "
         "Be concise and clear in your responses."
     )
 
