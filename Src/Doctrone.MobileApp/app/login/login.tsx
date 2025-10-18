@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/useAuth'; // Adjust the import path as needed
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -9,27 +10,35 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  type TextStyle,
+  type ViewStyle,
 } from 'react-native';
 
-const Login = () => {
+const Login: React.FC = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, loading } = useAuth();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const handleLogin = async () => {
+  const handleLogin = async (): Promise<void> => {
     if (!email || !password) {
       Alert.alert('Грешка', 'Моля, попълнете всички полета');
       return;
     }
 
-    setIsLoading(true);
-    // Add your login logic here
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push('/(tabs)/home');
-    }, 1000);
+    const result = await login(email, password);
+    
+    if (result.success) {
+      Alert.alert('Успех', 'Успешно влизане!', [
+        {
+          text: 'OK',
+          onPress: () => router.push('/(tabs)/home')
+        }
+      ]);
+    } else {
+      Alert.alert('Грешка', result.error || 'Неуспешно влизане');
+    }
   };
 
   return (
@@ -61,6 +70,7 @@ const Login = () => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
+              editable={!loading}
             />
           </View>
 
@@ -76,24 +86,24 @@ const Login = () => {
               secureTextEntry
               autoCapitalize="none"
               autoComplete="password"
+              editable={!loading}
             />
           </View>
 
           {/* Forgot Password */}
-          <TouchableOpacity style={styles.forgotPassword}>
+          <TouchableOpacity style={styles.forgotPassword} disabled={loading}>
             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
           </TouchableOpacity>
 
           {/* Login Button */}
           <TouchableOpacity
-            style={[styles.button, isLoading && styles.buttonDisabled]}
+            style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleLogin}
-            disabled={isLoading}
+            disabled={loading}
             activeOpacity={0.8}
           >
-                
             <Text style={styles.buttonText}>
-              {isLoading ? 'Logging...' : 'Login'}
+              {loading ? 'Logging...' : 'Login'}
             </Text>
           </TouchableOpacity>
 
@@ -107,7 +117,10 @@ const Login = () => {
           {/* Register Link */}
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => router.push('/login/register')}>
+            <TouchableOpacity 
+              onPress={() => router.push('/login/register')}
+              disabled={loading}
+            >
               <Text style={styles.registerLink}>Register</Text>
             </TouchableOpacity>
           </View>
@@ -117,7 +130,30 @@ const Login = () => {
   );
 };
 
-const styles = StyleSheet.create({
+interface Styles {
+  container: ViewStyle;
+  scrollContent: ViewStyle;
+  header: ViewStyle;
+  title: TextStyle;
+  subtitle: TextStyle;
+  form: ViewStyle;
+  inputContainer: ViewStyle;
+  label: TextStyle;
+  input: ViewStyle & TextStyle;
+  forgotPassword: ViewStyle;
+  forgotPasswordText: TextStyle;
+  button: ViewStyle;
+  buttonDisabled: ViewStyle;
+  buttonText: TextStyle;
+  divider: ViewStyle;
+  dividerLine: ViewStyle;
+  dividerText: TextStyle;
+  registerContainer: ViewStyle;
+  registerText: TextStyle;
+  registerLink: TextStyle;
+}
+
+const styles = StyleSheet.create<Styles>({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',

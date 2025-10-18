@@ -1,17 +1,26 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { Bubble, Composer, GiftedChat, IMessage, InputToolbar, Send } from 'react-native-gifted-chat';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale } from 'react-native-size-matters';
-import { useAIChat } from '../../hooks/useAI'; // Import the hook
+import { useAIChat } from '../../hooks/useAI';
 
-const API_URL = 'https://doctrone.onrender.com/chat'; // Replace with your actual API URL
+const API_URL = 'https://doctrone.onrender.com/new_chat'; 
 
 export default function Home() {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { sendMessage, isLoading, error } = useAIChat(API_URL);
-
+useEffect(() => {
+  const checkAuth = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    const userData = await AsyncStorage.getItem('userData');
+    console.log('Stored token:', token);
+    console.log('Stored userData:', userData);
+  };
+  checkAuth();
+}, []);
   useEffect(() => {
     setMessages([]);
   }, []);
@@ -32,8 +41,8 @@ export default function Home() {
     const userMessage = newMessages[0];
     
     try {
-      // Call the AI API with user_id: 1
-      const aiResponseText = await sendMessage(userMessage.text, 1);
+      // Call the AI API - user_id is automatically retrieved from AsyncStorage
+      const aiResponseText = await sendMessage(userMessage.text);
       
       // Add AI response to chat
       const aiResponse: IMessage = {
