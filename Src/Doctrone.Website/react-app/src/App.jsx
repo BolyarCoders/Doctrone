@@ -9,31 +9,29 @@ import Profile from "./pages/Profile.jsx";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentPage, setCurrentPage] = useState("dashboard");
-  const [theme, setTheme] = useState("dark");
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [theme, setTheme] = useState('dark');
   const [user, setUser] = useState(mockUser);
-
+  
   React.useEffect(() => {
     document.body.className = `${theme}-theme`;
   }, [theme]);
-
+  
   return (
-    <AppContext.Provider
-      value={{
-        isLoggedIn,
-        setIsLoggedIn,
-        currentPage,
-        setCurrentPage,
-        theme,
-        setTheme,
-        user,
-        setUser,
-      }}
-    >
+    <AppContext.Provider value={{ 
+      isLoggedIn, 
+      setIsLoggedIn, 
+      currentPage, 
+      setCurrentPage,
+      theme,
+      setTheme,
+      user,
+      setUser
+    }}>
       <style>{styles}</style>
       {!isLoggedIn ? (
         <Landing />
-      ) : currentPage === "dashboard" ? (
+      ) : currentPage === 'dashboard' ? (
         <Dashboard />
       ) : (
         <Profile />
