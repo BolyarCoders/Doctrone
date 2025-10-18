@@ -1,0 +1,225 @@
+[
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "AddChat",
+    "RelativePath": "Doctrone/AddChat",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "chat",
+        "Type": "DoctrroneAPI.Models.Chat",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "AddDrugs",
+    "RelativePath": "Doctrone/AddDrugs",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "drug",
+        "Type": "DoctrroneAPI.Models.Drugs",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "AddFolder",
+    "RelativePath": "Doctrone/AddFolder",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "folder",
+        "Type": "DoctrroneAPI.Models.Folder",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "AddMessage",
+    "RelativePath": "Doctrone/AddMessage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "message",
+        "Type": "DoctrroneAPI.Models.Message",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "AddPrescription",
+    "RelativePath": "Doctrone/AddPrescription",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "prescription",
+        "Type": "DoctrroneAPI.Models.Prescriptions",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeleteChat",
+    "RelativePath": "Doctrone/DeleteChat",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "chatId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeleteDrug",
+    "RelativePath": "Doctrone/DeleteDrug",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "drugId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeleteFolder",
+    "RelativePath": "Doctrone/DeleteFolder",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "folderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeleteMessage",
+    "RelativePath": "Doctrone/DeleteMessage",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "messageId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeletePrescription",
+    "RelativePath": "Doctrone/DeletePrescription",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "prescriptionId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "DeleteUser",
+    "RelativePath": "Doctrone/DeleteUser",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetUsers",
+    "RelativePath": "Doctrone/GetUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "Login",
+    "RelativePath": "Doctrone/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "Register",
+    "RelativePath": "Doctrone/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "newUser",
+        "Type": "DoctrroneAPI.Models.UserRegister",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
