@@ -10,12 +10,12 @@ app = Flask(__name__)
 load_dotenv()
 
 # Configure Gemini
-genai.configure(api_key=os.getenv("AIzaSyBzMQutGJnduWwKcTrmvAvP_QiTj8zaJ3I"))
+genai.configure(api_key="AIzaSyBzMQutGJnduWwKcTrmvAvP_QiTj8zaJ3I")
 model = genai.GenerativeModel(model_name="gemini-2.5-flash")
 
 # Configure Supabase
-SUPABASE_URL = os.getenv("https://vhssvvlsgoprgizbckea.supabase.co")
-SUPABASE_KEY = os.getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoc3N2dmxzZ29wcmdpemJja2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA3MzgxNzIsImV4cCI6MjA3NjMxNDE3Mn0.ztzSA5TXSQA9Cjz-T9YBkpzjW2e07JajSHhVQApECYY")
+SUPABASE_URL = "https://vhssvvlsgoprgizbckea.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoc3N2dmxzZ29wcmdpemJja2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA3MzgxNzIsImV4cCI6MjA3NjMxNDE3Mn0.ztzSA5TXSQA9Cjz-T9YBkpzjW2e07JajSHhVQApECYY"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @app.post("/chat")
