@@ -362,6 +362,87 @@
           }
         }
       }
+    },
+    "/Doctrone/GetPrescriptions": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetDrugs": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetFolders": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetChats": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetMessages": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetUserIdByEmail": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {

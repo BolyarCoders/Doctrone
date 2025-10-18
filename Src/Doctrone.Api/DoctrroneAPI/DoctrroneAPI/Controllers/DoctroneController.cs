@@ -69,7 +69,6 @@ namespace DoctrroneAPI.Controllers
             var jsonContent = JsonConvert.SerializeObject(newUser);
             var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
-            // Post to Supabase REST API
             var response = await _client.PostAsync("rest/v1/users", content);
             response.EnsureSuccessStatusCode();
 
@@ -248,5 +247,61 @@ namespace DoctrroneAPI.Controllers
             return Ok(new { message = "Folder deleted successfully." });
         }
 
+        //Gets:
+
+        [HttpGet]
+        public async Task<IActionResult> GetPrescriptions()
+        {
+            var response = await _client.GetAsync("rest/v1/prescriptions");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDrugs()
+        {
+            var response = await _client.GetAsync("rest/v1/drugs");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFolders()
+        {
+            var response = await _client.GetAsync("rest/v1/folders");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChats()
+        {
+            var response = await _client.GetAsync("rest/v1/chats");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessages()
+        {
+            var response = await _client.GetAsync("rest/v1/messages");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserIdByEmail(string email)
+        {
+            var response = await _client.GetAsync($"rest/v1/users?email=eq.{email}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
     }
 }

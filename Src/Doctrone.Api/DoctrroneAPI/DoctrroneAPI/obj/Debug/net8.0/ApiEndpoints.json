@@ -177,6 +177,72 @@
   },
   {
     "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetChats",
+    "RelativePath": "Doctrone/GetChats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetDrugs",
+    "RelativePath": "Doctrone/GetDrugs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetFolders",
+    "RelativePath": "Doctrone/GetFolders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetMessages",
+    "RelativePath": "Doctrone/GetMessages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetPrescriptions",
+    "RelativePath": "Doctrone/GetPrescriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetUserIdByEmail",
+    "RelativePath": "Doctrone/GetUserIdByEmail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
     "Method": "GetUsers",
     "RelativePath": "Doctrone/GetUsers",
     "HttpMethod": "GET",
