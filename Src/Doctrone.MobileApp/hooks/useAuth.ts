@@ -51,6 +51,9 @@ export function useAuth(): UseAuthReturn {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+
+
+  
   // Helper to fetch numeric user ID
   const fetchUserIdByEmail = async (email: string): Promise<number | null> => {
     try {
@@ -261,6 +264,7 @@ export function useAuth(): UseAuthReturn {
       return null;
     }
   };
+  
 
   return { login, register, logout, getToken, getUserData, loading, error };
 }

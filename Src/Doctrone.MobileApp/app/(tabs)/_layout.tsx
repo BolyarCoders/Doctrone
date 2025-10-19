@@ -119,7 +119,7 @@ export default function RootLayout() {
                 <Text style={styles.sectionTitle}>Individual Prescriptions</Text>
                 <TouchableOpacity 
                   onPress={() => {
-                    router.push('/login/optionsRegister');
+                    router.push('/(login)/optionsRegister');
                     toggleSidebar();
                   }} 
                   style={styles.addButtonContainer}
@@ -231,7 +231,7 @@ export default function RootLayout() {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity onPress={() => {}} style={styles.profileButton}>
+              <TouchableOpacity  style={styles.profileButton}>
                 <Svg width={28} height={28} viewBox="0 0 24 24" fill="none">
                   <Circle cx="12" cy="8" r="4" stroke="#fff" strokeWidth={2} />
                   <Path

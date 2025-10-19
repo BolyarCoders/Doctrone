@@ -147,7 +147,14 @@ namespace DoctrroneAPI.Controllers
 
             response.EnsureSuccessStatusCode();
             var responseJson = await response.Content.ReadAsStringAsync();
-            return Content(responseJson, "application/json");
+           // return Content(responseJson, "application/json");
+
+
+            var response2 = await _client.GetAsync($"rest/v1/drugs?name=eq.{drug.Name}");
+            response2.EnsureSuccessStatusCode();
+            var json = await response2.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+
         }
 
         [HttpPost]
@@ -295,7 +302,7 @@ namespace DoctrroneAPI.Controllers
             var json = await response.Content.ReadAsStringAsync();
             return Content(json, "application/json");
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetChatsOfUser(int folderId)
         {
@@ -322,5 +329,6 @@ namespace DoctrroneAPI.Controllers
             var json = await response.Content.ReadAsStringAsync();
             return Content(json, "application/json");
         }
+
     }
 }
