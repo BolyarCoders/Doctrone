@@ -187,6 +187,22 @@
   },
   {
     "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetChatsOfUser",
+    "RelativePath": "Doctrone/GetChatsOfUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "folderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
     "Method": "GetDrugs",
     "RelativePath": "Doctrone/GetDrugs",
     "HttpMethod": "GET",
@@ -207,12 +223,34 @@
   },
   {
     "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
-    "Method": "GetMessages",
-    "RelativePath": "Doctrone/GetMessages",
+    "Method": "GetFoldersOfUser",
+    "RelativePath": "Doctrone/GetFoldersOfUser",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DoctrroneAPI.Controllers.DoctroneController",
+    "Method": "GetMessagesOfUser",
+    "RelativePath": "Doctrone/GetMessagesOfUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "chatId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
