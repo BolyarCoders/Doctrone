@@ -19,6 +19,8 @@ import Svg, { Path } from 'react-native-svg';
 
 
 
+
+
 export const AddPrescriptionScreen = () => {
   const router = useRouter();
   const [drugName, setDrugName] = useState('');
@@ -36,6 +38,7 @@ export const AddPrescriptionScreen = () => {
     try {
       const response = await addPrescription(drugName, intake, dosage);
       
+
       if (response.success) {
         Alert.alert(
           'Success', 
@@ -49,7 +52,7 @@ export const AddPrescriptionScreen = () => {
                 setIntake('');
                 setDosage('');
                 // Navigate back or to home
-                router.back();
+                router.navigate('/(tabs)/home');
               }
             }
           ]

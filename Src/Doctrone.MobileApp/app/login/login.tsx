@@ -21,21 +21,43 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleLogin = async (): Promise<void> => {
-    if (!email || !password) {
-      Alert.alert('Грешка', 'Моля, попълнете всички полета');
-      return;
-    }
+const handleLogin = async (): Promise<void> => {
+  if (!email || !password) {
+    Alert.alert('Грешка', 'Моля, попълнете всички полета');
+    return;
+  }
 
-    const result = await login(email, password);
+  const result = await login(email, password);
+  
+  if (result.success) {
+    const userId = result.data?.userId || result.data?.id;
     
-    if (result.success) {
-   
-      router.push('/(tabs)/home');
+    if (userId) {
+      try {
+        // Check prescription directly
+        const response = await fetch(
+          `https://doctroneapi.onrender.com/Doctrone/GetPrescriptionByUserId?userId=${userId}`
+        );
+        
+        const hasPrescription = response.ok && (await response.text()).length > 0;
+        
+        if (hasPrescription) {
+          router.push('/(tabs)/home');
+        } else {
+          router.push('/login/optionsRegister');
+        }
+      } catch (error) {
+        console.error('Error checking prescription:', error);
+        // Default to home on error
+        router.push('/(tabs)/home');
+      }
     } else {
-      Alert.alert('Errpr', result.error || 'Failed to login');
+      router.push('/(tabs)/home');
     }
-  };
+  } else {
+    Alert.alert('Error', result.error || 'Failed to login');
+  }
+};
 
   return (
     <KeyboardAvoidingView 
