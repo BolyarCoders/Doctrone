@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "../assets/doctrone-logo.png";
 
 const Sidebar = ({
   isCollapsed,
@@ -20,7 +21,7 @@ const Sidebar = ({
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo" title="Doctrone - AI Medical Assistant">
-          🏥
+          <img src={logo} alt="Doctrone Logo" className="logo-image" />
         </div>
         <button className="sidebar-toggle" onClick={onToggle}>
           {isCollapsed ? "→" : "←"}
