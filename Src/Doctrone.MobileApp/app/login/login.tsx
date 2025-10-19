@@ -1,4 +1,3 @@
-import { useAuth } from '@/hooks/useAuth'; // Adjust the import path as needed
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -14,6 +13,7 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
+import { useAuth } from '../../hooks/useAuth'; // With curly braces
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -30,14 +30,10 @@ const Login: React.FC = () => {
     const result = await login(email, password);
     
     if (result.success) {
-      Alert.alert('Успех', 'Успешно влизане!', [
-        {
-          text: 'OK',
-          onPress: () => router.push('/(tabs)/home')
-        }
-      ]);
+   
+      router.push('/(tabs)/home');
     } else {
-      Alert.alert('Грешка', result.error || 'Неуспешно влизане');
+      Alert.alert('Errpr', result.error || 'Failed to login');
     }
   };
 

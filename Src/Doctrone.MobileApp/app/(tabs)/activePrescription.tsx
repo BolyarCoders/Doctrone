@@ -1,10 +1,88 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
+interface ChatMessage {
+  id: number;
+  title: string | null;
+  started_at: string;
+  user_id: number;
+  folder_id?: number | null;
+}
+
 const ActivePrescription = () => {
+  const params = useLocalSearchParams();
+  const folderId = params.folderId as string;
+  const folderName = params.folderName as string;
+
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- Fetch chats for logged-in user ---
+  useEffect(() => {
+    const fetchUserChats = async () => {
+      try {
+        setLoading(true);
+
+        // Get logged-in user data
+        const storedUserData = await AsyncStorage.getItem('userData');
+        if (!storedUserData) throw new Error('No logged in user found');
+
+        const user = JSON.parse(storedUserData);
+        const userId = user.id || user.userId;
+        if (!userId) throw new Error('Invalid user ID');
+
+        // Fetch all chats from API
+        const response = await fetch('https://doctroneapi.onrender.com/Doctrone/GetChats');
+        if (!response.ok) throw new Error('Failed to fetch chats');
+
+        const data: ChatMessage[] = await response.json();
+
+        // Filter chats only for this user
+        const userChats = data.filter((chat) => chat.user_id === userId);
+
+        // Optional: sort newest first
+        userChats.sort(
+          (a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime()
+        );
+
+        setChatHistory(userChats);
+      } catch (err: any) {
+        console.error('Error fetching chats:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserChats();
+  }, []);
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diff < 60) return `${diff} seconds ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+    return `${Math.floor(diff / 604800)} week(s) ago`;
+  };
+
+  // --- Icons (Folder, Chat, Plus, Chevron) remain unchanged ---
   const FolderIcon = ({ size = 24, color = "#fff" }) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path
@@ -55,12 +133,13 @@ const ActivePrescription = () => {
     </Svg>
   );
 
-  const chatHistory = [
-    { id: 1, title: "Side effects question", date: "2 hours ago" },
-    { id: 2, title: "Dosage inquiry", date: "Yesterday" },
-    { id: 3, title: "Interaction with food", date: "2 days ago" },
-    { id: 4, title: "Alternative medications", date: "3 days ago" },
-  ];
+  const handleNewChat = () => {
+    router.push('../home');
+  };
+
+  const handleChatSelect = (chatId: number) => {
+    console.log('Opening chat:', chatId);
+ router.push('../chatBot');  };
 
   return (
     <LinearGradient colors={['#13A77C', '#074131']} style={styles.container}>
@@ -71,21 +150,27 @@ const ActivePrescription = () => {
             <View style={styles.iconWrapper}>
               <FolderIcon size={32} color="#fff" />
             </View>
-            <View>
-              <Text style={styles.title}>Ибопрофен</Text>
-              <Text style={styles.subtitle}>Anti-inflammatory medication</Text>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.title}>{folderName || 'Prescription'}</Text>
+              <Text style={styles.subtitle}>
+                {folderId ? `Folder ID: ${folderId}` : 'Medication details'}
+              </Text>
             </View>
           </View>
         </View>
 
         {/* Content Section */}
-        <ScrollView 
+        <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
         >
           {/* New Chat Button */}
-          <TouchableOpacity style={styles.newChatButton} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.newChatButton}
+            activeOpacity={0.8}
+            onPress={handleNewChat}
+          >
             <PlusIcon size={20} color="#fff" />
             <Text style={styles.newChatText}>Start New Conversation</Text>
           </TouchableOpacity>
@@ -93,26 +178,52 @@ const ActivePrescription = () => {
           {/* Chat History Section */}
           <View style={styles.historySection}>
             <Text style={styles.historyTitle}>Chat History</Text>
-            <Text style={styles.historySubtitle}>Continue previous conversations</Text>
+            <Text style={styles.historySubtitle}>
+              Continue previous conversations
+            </Text>
 
-            <View style={styles.chatList}>
-              {chatHistory.map((chat) => (
-                <TouchableOpacity 
-                  key={chat.id} 
-                  style={styles.chatItem}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.chatIconWrapper}>
-                    <ChatIcon size={18} color="#13A77C" />
-                  </View>
-                  <View style={styles.chatContent}>
-                    <Text style={styles.chatTitle}>{chat.title}</Text>
-                    <Text style={styles.chatDate}>{chat.date}</Text>
-                  </View>
-                  <ChevronIcon size={20} color="#9CA3AF" />
-                </TouchableOpacity>
-              ))}
-            </View>
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#13A77C" />
+                <Text style={styles.loadingText}>Loading chat history...</Text>
+              </View>
+            ) : error ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>❌ {error}</Text>
+              </View>
+            ) : chatHistory.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyIcon}>💬</Text>
+                <Text style={styles.emptyText}>No conversations yet</Text>
+                <Text style={styles.emptySubtext}>
+                  Start a new conversation to ask questions about {folderName}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.chatList}>
+                {chatHistory.map((chat) => (
+                  <TouchableOpacity
+                    key={chat.id}
+                    style={styles.chatItem}
+                    activeOpacity={0.7}
+                    onPress={() => handleChatSelect(chat.id)}
+                  >
+                    <View style={styles.chatIconWrapper}>
+                      <ChatIcon size={18} color="#13A77C" />
+                    </View>
+                    <View style={styles.chatContent}>
+                      <Text style={styles.chatTitle}>
+                        {chat.title || 'Untitled Chat'}
+                      </Text>
+                      <Text style={styles.chatDate}>
+                        {formatTimeAgo(chat.started_at)}
+                      </Text>
+                    </View>
+                    <ChevronIcon size={20} color="#9CA3AF" />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
 
           {/* Info Card */}
@@ -131,23 +242,14 @@ const ActivePrescription = () => {
   );
 };
 
+export default ActivePrescription;
+
+// --- ORIGINAL STYLES (unchanged) ---
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 100,
-    paddingBottom: 40,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
+  container: { flex: 1 },
+  safeArea: { flex: 1 },
+  header: { paddingHorizontal: 20, paddingTop: 100, paddingBottom: 40 },
+  headerContent: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   iconWrapper: {
     width: 64,
     height: 64,
@@ -156,124 +258,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#fff',
-    letterSpacing: 0.3,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: 'rgba(255, 255, 255, 0.85)',
-    marginTop: 4,
-  },
-  scrollView: {
-    flex: 1,
-    backgroundColor: '#F8FAFB',
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-  },
-  content: {
-    padding: 24,
-    paddingBottom: 40,
-  },
-  newChatButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-    backgroundColor: '#13A77C',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 16,
-    shadowColor: '#13A77C',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  newChatText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    letterSpacing: 0.3,
-  },
-  historySection: {
-    marginTop: 32,
-  },
-  historyTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1F2937',
-    marginBottom: 4,
-  },
-  historySubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 16,
-  },
-  chatList: {
-    gap: 8,
-  },
-  chatItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    marginBottom: 8,
-  },
-  chatIconWrapper: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#F0F9F6',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  chatContent: {
-    flex: 1,
-  },
-  chatTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 4,
-  },
-  chatDate: {
-    fontSize: 13,
-    color: '#9CA3AF',
-  },
-  infoCard: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 24,
-    padding: 16,
-    backgroundColor: '#13A77C',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#19E4AB',
-  },
-  infoIcon: {
-    fontSize: 24,
-  },
-  infoContent: {
-    flex: 1,
-  },
-  infoTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFF',
-    marginBottom: 4,
-  },
-  infoText: {
-    fontSize: 13,
-    color: '#EAFDF7',
-    lineHeight: 20,
-  },
+  headerTextContainer: { flex: 1 },
+  title: { fontSize: 28, fontWeight: '700', color: '#fff', letterSpacing: 0.3 },
+  subtitle: { fontSize: 15, color: 'rgba(255, 255, 255, 0.85)', marginTop: 4 },
+  scrollView: { flex: 1, backgroundColor: '#F8FAFB', borderTopLeftRadius: 32, borderTopRightRadius: 32 },
+  content: { padding: 24, paddingBottom: 40 },
+  newChatButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, backgroundColor: '#13A77C', paddingVertical: 16, paddingHorizontal: 24, borderRadius: 16, shadowColor: '#13A77C', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 6 },
+  newChatText: { fontSize: 16, fontWeight: '600', color: '#fff', letterSpacing: 0.3 },
+  historySection: { marginTop: 32 },
+  historyTitle: { fontSize: 18, fontWeight: '700', color: '#1F2937', marginBottom: 4 },
+  historySubtitle: { fontSize: 14, color: '#6B7280', marginBottom: 16 },
+  loadingContainer: { padding: 40, alignItems: 'center', gap: 12 },
+  loadingText: { fontSize: 14, color: '#6B7280' },
+  errorContainer: { padding: 24, backgroundColor: '#FEF2F2', borderRadius: 12, borderWidth: 1, borderColor: '#FEE2E2' },
+  errorText: { fontSize: 14, color: '#DC2626', textAlign: 'center' },
+  emptyContainer: { padding: 40, alignItems: 'center', gap: 8 },
+  emptyIcon: { fontSize: 48, marginBottom: 8 },
+  emptyText: { fontSize: 16, fontWeight: '600', color: '#6B7280' },
+  emptySubtext: { fontSize: 14, color: '#9CA3AF', textAlign: 'center', marginTop: 4 },
+  chatList: { gap: 8 },
+  chatItem: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, backgroundColor: '#fff', borderRadius: 12, borderWidth: 1, borderColor: '#E5E7EB', marginBottom: 8 },
+  chatIconWrapper: { width: 40, height: 40, backgroundColor: '#F0F9F6', borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
+  chatContent: { flex: 1 },
+  chatTitle: { fontSize: 15, fontWeight: '600', color: '#1F2937', marginBottom: 4 },
+  chatDate: { fontSize: 13, color: '#9CA3AF' },
+  infoCard: { flexDirection: 'row', gap: 12, marginTop: 24, padding: 16, backgroundColor: '#13A77C', borderRadius: 12, borderWidth: 1, borderColor: '#19E4AB' },
+  infoIcon: { fontSize: 24 },
+  infoContent: { flex: 1 },
+  infoTitle: { fontSize: 14, fontWeight: '600', color: '#FFF', marginBottom: 4 },
+  infoText: { fontSize: 13, color: '#EAFDF7', lineHeight: 20 },
 });
-
-export default ActivePrescription;

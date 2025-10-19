@@ -1,34 +1,92 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { Bubble, Composer, GiftedChat, IMessage, InputToolbar, Send } from 'react-native-gifted-chat';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale } from 'react-native-size-matters';
+import { useMessages } from '../../hooks/fetchMessages';
+import { useAIChat } from '../../hooks/useAI';
 
-export default function ChatBot() {
+const API_URL = 'https://doctrone.onrender.com/new_chat'; 
+
+export default function Home({ route }: any) {
+  const chatId = route?.params?.chatId || 0; // pass chatId when navigating
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const { sendMessage, isLoading, error } = useAIChat(API_URL);
+  const { fetchedMessages, fetchMessages, loading: loadingMessages, error: messagesError } = useMessages();
 
+  // Load stored token/userData (optional)
   useEffect(() => {
-    setMessages([]);
+    const checkAuth = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      const userData = await AsyncStorage.getItem('userData');
+      console.log('Stored token:', token);
+      console.log('Stored userData:', userData);
+    };
+    checkAuth();
   }, []);
 
-  const onSend = useCallback((newMessages: IMessage[] = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
+  // Fetch messages for this chat
+  useEffect(() => {
+    fetchMessages(chatId);
+  }, [chatId]);
 
-    setTimeout(() => {
+  // Map API messages to GiftedChat messages
+  useEffect(() => {
+    if (fetchedMessages?.length) {
+      const mappedMessages: IMessage[] = fetchedMessages.map((msg) => ({
+        _id: msg.id,
+        text: msg.content,
+        createdAt: new Date(msg.created_at),
+        user: {
+          _id: msg.sender === 'user' ? 1 : 2,
+          name: msg.sender === 'user' ? 'You' : 'Doctrone AI',
+        },
+      }));
+      setMessages(mappedMessages.reverse()); // reverse to show latest at bottom
+    }
+  }, [fetchedMessages]);
+
+  // Show error alerts
+  useEffect(() => {
+    if (error) Alert.alert('Error', error);
+    if (messagesError) Alert.alert('Error', messagesError);
+  }, [error, messagesError]);
+
+  const onSend = useCallback(async (newMessages: IMessage[] = []) => {
+    // Add user message immediately
+    setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
+
+    const userMessage = newMessages[0];
+
+    try {
+      const aiResponseText = await sendMessage(userMessage.text);
+
       const aiResponse: IMessage = {
         _id: Math.random().toString(),
-        text: 'This is a simulated response. In a real implementation, this would connect to an AI API.',
+        text: aiResponseText,
         createdAt: new Date(),
         user: {
           _id: 2,
           name: 'Doctrone AI',
         },
       };
+
       setMessages((prev) => GiftedChat.append(prev, [aiResponse]));
-    }, 1000);
-  }, []);
+    } catch {
+      const errorResponse: IMessage = {
+        _id: Math.random().toString(),
+        text: "I'm sorry, I'm having trouble connecting right now. Please try again.",
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'Doctrone AI',
+        },
+      };
+      setMessages((prev) => GiftedChat.append(prev, [errorResponse]));
+    }
+  }, [sendMessage]);
 
   const renderBubble = (props: any) => (
     <Bubble
@@ -45,9 +103,9 @@ export default function ChatBot() {
   );
 
   const renderSend = (props: any) => (
-    <Send {...props} containerStyle={styles.sendContainer}>
-      <View style={styles.sendButton}>
-        <Text style={styles.sendText}>➤</Text>
+    <Send {...props} containerStyle={styles.sendContainer} disabled={isLoading}>
+      <View style={[styles.sendButton, isLoading && styles.sendButtonDisabled]}>
+        <Text style={styles.sendText}>{isLoading ? '...' : '➤'}</Text>
       </View>
     </Send>
   );
@@ -64,36 +122,42 @@ export default function ChatBot() {
 
   return (
     <LinearGradient colors={['#13A77C', '#074131']} style={styles.container}>
-      {messages.length === 0 && (
-        <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeText}>Welcome to Doctrone</Text>
+      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+        {messages.length === 0 && !loadingMessages && (
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.welcomeText}>Welcome to Doctrone</Text>
+          </View>
+        )}
+        <View style={styles.chatContainer}>
+          <GiftedChat
+            messages={messages}
+            onSend={(msgs) => onSend(msgs)}
+            user={{ _id: 1 }}
+            renderBubble={renderBubble}
+            renderSend={renderSend}
+            renderComposer={renderComposer}
+            renderInputToolbar={renderInputToolbar}
+            placeholder="Message Doctrone AI..."
+            textInputProps={{ placeholderTextColor: '#fff' }}
+            alwaysShowSend
+            renderAvatar={null}
+            minInputToolbarHeight={60}
+            bottomOffset={0}
+            keyboardShouldPersistTaps="never"
+          />
         </View>
-      )}
-      <GiftedChat
-        messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{ _id: 1 }}
-        renderBubble={renderBubble}
-        renderSend={renderSend}
-        renderComposer={renderComposer}
-        renderInputToolbar={renderInputToolbar}
-        placeholder="Message Doctrone AI..."
-          textInputProps={{
-    placeholderTextColor: '#fff',
-  }}
-        alwaysShowSend
-        renderAvatar={null}
-        minInputToolbarHeight={60}
-        bottomOffset={Platform.OS === 'ios' ? 34 : 0}
-        keyboardShouldPersistTaps="never"
-      />
+      </SafeAreaView>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
+  safeArea: { flex: 1 },
+  chatContainer: {
+    flex: 1,
+    marginTop: Platform.OS === 'ios' ? moderateScale(80) : moderateScale(70),
+  },
   welcomeContainer: {
     position: 'absolute',
     top: '50%',
@@ -101,7 +165,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1,
+    zIndex: 0,
   },
   welcomeText: {
     fontSize: moderateScale(32),
@@ -109,7 +173,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
   },
-
   bubbleLeft: {
     backgroundColor: '#1A2420',
     borderRadius: moderateScale(16),
@@ -124,7 +187,7 @@ const styles = StyleSheet.create({
   },
   bubbleRight: {
     backgroundColor: '#1A2420',
-   borderRadius: moderateScale(16),
+    borderRadius: moderateScale(16),
     padding: moderateScale(3),
     marginVertical: moderateScale(3),
     marginHorizontal: moderateScale(7),
@@ -134,12 +197,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  bubbleText: {
-    color: '#fff',
-    fontSize: moderateScale(14.5),
-    lineHeight: 20,
-  },
-
+  bubbleText: { color: '#fff', fontSize: moderateScale(14.5), lineHeight: 20 },
   inputToolbar: {
     backgroundColor: 'transparent',
     borderTopWidth: 0,
@@ -165,7 +223,7 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: moderateScale(15),
     lineHeight: 20,
-    paddingBottom: moderateScale(5), //TODO: add Model choosing button
+    paddingBottom: moderateScale(5),
   },
   primaryStyle: { alignItems: 'center' },
   sendContainer: {
@@ -175,7 +233,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-
   },
   sendButton: {
     width: 32,
@@ -185,10 +242,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sendText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 2,
-  },
+  sendButtonDisabled: { opacity: 0.5 },
+  sendText: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginLeft: 2 },
 });

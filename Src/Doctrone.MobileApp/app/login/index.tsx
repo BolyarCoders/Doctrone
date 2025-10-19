@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const Index = () => {
   const router = useRouter();
@@ -10,8 +10,8 @@ const Index = () => {
       <View style={styles.content}>
         {/* Logo Container */}
         <View style={styles.logoContainer}>
-          <Text style={styles.companyName}>DOCTRONE</Text>
-        </View>
+          <Image style={{width:400, height:400}}  source={require('../../assets/images/Doctrone-logo2.png')} />
+          </View>
 
         {/* Welcome Text */}
         <View style={styles.textContainer}>

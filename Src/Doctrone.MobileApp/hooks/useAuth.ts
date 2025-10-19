@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 
-const API_BASE_URL: string = 'https://doctroneapi.onrender.com/Doctrone';
+const API_BASE_URL = 'https://doctroneapi.onrender.com/Doctrone';
 
+// --- Types ---
 interface LoginResponse {
   success?: boolean;
   data?: any;
@@ -10,7 +11,6 @@ interface LoginResponse {
   token?: string;
   user?: any;
   message?: string;
-  // Direct user fields (for when API returns user data directly)
   name?: string;
   email?: string;
   pass?: string;
@@ -20,14 +20,14 @@ interface LoginResponse {
   special_diagnosis?: string;
 }
 
-interface RegisterData {
+export interface RegisterData {
   name: string;
   email: string;
-  password?: string;
-  blood_type?: string;
+  pass?: string;
+  bloodType?: string;
   age?: number;
   gender?: string;
-  special_diagnosis?: string;
+  specialDiagnosis?: string;
 }
 
 interface AuthResult {
@@ -46,168 +46,50 @@ interface UseAuthReturn {
   error: string | null;
 }
 
+// --- Hook ---
 export function useAuth(): UseAuthReturn {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Helper function to fetch user ID by email
-const fetchUserIdByEmail = async (email: string): Promise<number | null> => {
-  try {
-    const url = `${API_BASE_URL}/GetUserIdByEmail?email=${encodeURIComponent(email)}`;
-    const response = await fetch(url, { method: 'GET' });
-    if (!response.ok) return null;
-
-    const responseText = await response.text();
-    let userId: number | null = null;
-
+  // Helper to fetch numeric user ID
+  const fetchUserIdByEmail = async (email: string): Promise<number | null> => {
     try {
-      let userData = JSON.parse(responseText);
+      const url = `${API_BASE_URL}/GetUserIdByEmail?email=${encodeURIComponent(email)}`;
+      const response = await fetch(url);
+      if (!response.ok) return null;
 
-      // ✅ If API returned array, pick first element
-      if (Array.isArray(userData)) userData = userData[0];
+      const text = await response.text();
+      let userId: number | null = null;
 
-      userId = userData.id || userData.userId || userData.user_id || null;
-    } catch {
-      userId = parseInt(responseText);
-    }
+      try {
+        let data = JSON.parse(text);
+        if (Array.isArray(data)) data = data[0];
+        userId = data.id || data.userId || data.user_id || null;
+      } catch {
+        userId = parseInt(text);
+      }
 
-    if (!userId || isNaN(userId)) {
-      console.error('Invalid user ID received');
+      if (!userId || isNaN(userId)) return null;
+      return userId;
+    } catch (err) {
+      console.error('Error fetching user ID:', err);
       return null;
     }
+  };
 
-    return userId;
-  } catch (err) {
-    console.error('Error fetching user ID:', err);
-    return null;
-  }
-};
-
-
-  // Login function
+  // --- LOGIN ---
   const login = async (email: string, password: string): Promise<AuthResult> => {
     setLoading(true);
     setError(null);
 
     try {
-      const url: string = `${API_BASE_URL}/Login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-      
-      console.log('Login URL:', url);
-      
-      const response: Response = await fetch(url, {
-        method: 'POST',
-      });
+      const url = `${API_BASE_URL}/Login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      const response = await fetch(url, { method: 'POST' });
+      const text = await response.text();
+      const data: LoginResponse = JSON.parse(text);
 
-      console.log('Response status:', response.status);
+      if (!response.ok) throw new Error(data.message || 'Login failed');
 
-      const responseText: string = await response.text();
-      console.log('Response text:', responseText);
-
-      let data: LoginResponse;
-      try {
-        data = JSON.parse(responseText) as LoginResponse;
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        throw new Error('Server returned invalid response. Please check the API endpoint.');
-      }
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Handle different API response formats
-      let userDataToStore: any;
-      let tokenToStore: string | null = null;
-
-      // Case 1: API returns { token, user } structure
-      if (data.token && data.user) {
-        tokenToStore = data.token;
-        userDataToStore = data.user;
-      }
-      // Case 2: API returns user data directly (your current API)
-      else if (data.email) {
-        userDataToStore = data;
-        tokenToStore = `session_${data.email}_${Date.now()}`;
-      }
-      // Case 3: Nested in data property
-      else if (data.data) {
-        userDataToStore = data.data;
-        tokenToStore = data.token || `session_${data.data.email}_${Date.now()}`;
-      }
-      else {
-        throw new Error('Unexpected API response format');
-      }
-
-      // Fetch the numeric user ID from the other API
-      const userId = await fetchUserIdByEmail(userDataToStore.email);
-      
-      if (userId) {
-        // Add the numeric user ID to the stored data
-        userDataToStore.id = userId;
-        userDataToStore.userId = userId; // Also store as userId for compatibility
-      } else {
-        console.warn('Could not fetch user ID, using email as fallback');
-        userDataToStore.id = userDataToStore.email;
-      }
-
-      // Store user data and token
-      await AsyncStorage.setItem('userToken', tokenToStore);
-      await AsyncStorage.setItem('userData', JSON.stringify(userDataToStore));
-      
-      console.log('Stored userData:', JSON.stringify(userDataToStore));
-
-      setLoading(false);
-      return { success: true, data: userDataToStore };
-    } catch (err) {
-      const errorMessage: string = err instanceof Error ? err.message : 'An error occurred';
-      setError(errorMessage);
-      setLoading(false);
-      return { success: false, error: errorMessage };
-    }
-  };
-
-  // Register function
-  const register = async (userData: RegisterData): Promise<AuthResult> => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const params: URLSearchParams = new URLSearchParams({
-        name: userData.name,
-        email: userData.email,
-        ...(userData.password && { password: userData.password }),
-        ...(userData.blood_type && { blood_type: userData.blood_type }),
-        ...(userData.age && { age: userData.age.toString() }),
-        ...(userData.gender && { gender: userData.gender }),
-        ...(userData.special_diagnosis && { special_diagnosis: userData.special_diagnosis }),
-      });
-
-      const url: string = `${API_BASE_URL}/Register?${params.toString()}`;
-      
-      console.log('Register URL:', url);
-      
-      const response: Response = await fetch(url, {
-        method: 'POST',
-      });
-
-      console.log('Response status:', response.status);
-
-      const responseText: string = await response.text();
-      console.log('Response text:', responseText);
-
-      let data: LoginResponse;
-      try {
-        data = JSON.parse(responseText) as LoginResponse;
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        throw new Error('Server returned invalid response. Please check the API endpoint.');
-      }
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-
-      // Handle different API response formats
       let userDataToStore: any;
       let tokenToStore: string | null = null;
 
@@ -224,45 +106,142 @@ const fetchUserIdByEmail = async (email: string): Promise<number | null> => {
         throw new Error('Unexpected API response format');
       }
 
-      // Fetch the numeric user ID from the other API
-      const userId = await fetchUserIdByEmail(userDataToStore.email);
+      // Fetch numeric userId
+      const numericUserId = await fetchUserIdByEmail(userDataToStore.email);
       
-      if (userId) {
-        userDataToStore.id = userId;
-        userDataToStore.userId = userId;
+      // ✅ Store BOTH id and userId for compatibility
+      if (numericUserId) {
+        userDataToStore.id = numericUserId;
+        userDataToStore.userId = numericUserId;
       } else {
-        console.warn('Could not fetch user ID, using email as fallback');
+        // Fallback: use email as identifier
+        console.warn('⚠️ Could not fetch numeric userId, using email as fallback');
         userDataToStore.id = userDataToStore.email;
+        userDataToStore.userId = 0; // API might need a number
       }
+
+      console.log('✅ Storing user data:', JSON.stringify(userDataToStore, null, 2));
 
       await AsyncStorage.setItem('userToken', tokenToStore);
       await AsyncStorage.setItem('userData', JSON.stringify(userDataToStore));
-      
-      console.log('Stored userData:', JSON.stringify(userDataToStore));
 
       setLoading(false);
       return { success: true, data: userDataToStore };
     } catch (err) {
-      const errorMessage: string = err instanceof Error ? err.message : 'An error occurred';
+      const msg = err instanceof Error ? err.message : 'An error occurred';
+      setError(msg);
+      setLoading(false);
+      return { success: false, error: msg };
+    }
+  };
+
+  // --- REGISTER ---
+  const register = async (userData: RegisterData): Promise<AuthResult> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const body = { ...userData };
+      const response = await fetch(`${API_BASE_URL}/Register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      const text = await response.text();
+      let data: any;
+
+      try { 
+        data = JSON.parse(text); 
+      } catch { 
+        data = { message: text };
+      }
+
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      console.log('✅ Registration successful');
+
+      // Option 1: Check if registration response includes userId
+      let numericUserId = data.userId || data.id || data.user_id;
+
+      // Option 2: Try to fetch userId with retries and longer delays
+      if (!numericUserId) {
+        console.log('⏳ Waiting for user to be created in database...');
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+
+        for (let attempt = 1; attempt <= 5; attempt++) {
+          console.log(`🔄 Attempt ${attempt}/5: Fetching userId...`);
+          numericUserId = await fetchUserIdByEmail(userData.email);
+          
+          if (numericUserId) {
+            console.log(`✅ Found userId: ${numericUserId}`);
+            break;
+          }
+          
+          if (attempt < 5) {
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Wait 1.5s between attempts
+          }
+        }
+      }
+
+      // Option 3: If still no userId, automatically log the user in
+      if (!numericUserId) {
+        console.log('⚠️ Could not fetch userId, attempting automatic login...');
+        
+        if (!userData.pass) {
+          throw new Error('Registration succeeded but could not log in automatically. Please log in manually.');
+        }
+
+        // Automatically log in the user
+        const loginResult = await login(userData.email, userData.pass);
+        
+        if (loginResult.success) {
+          setLoading(false);
+          return loginResult;
+        } else {
+          throw new Error('Registration succeeded but automatic login failed. Please log in manually.');
+        }
+      }
+
+      // Store user with valid userId
+      const userToStore = {
+        ...userData,
+        id: numericUserId,
+        userId: numericUserId,
+      };
+      
+      const token = data.token || `session_${userData.email}_${Date.now()}`;
+
+      console.log('✅ Storing user data after registration:', JSON.stringify(userToStore, null, 2));
+
+      await AsyncStorage.setItem('userToken', token);
+      await AsyncStorage.setItem('userData', JSON.stringify(userToStore));
+
+      setLoading(false);
+      return { success: true, data: userToStore };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
       setLoading(false);
       return { success: false, error: errorMessage };
     }
   };
 
-  // Logout function
+  // --- LOGOUT ---
   const logout = async (): Promise<AuthResult> => {
     try {
       await AsyncStorage.removeItem('userToken');
       await AsyncStorage.removeItem('userData');
       return { success: true };
     } catch (err) {
-      const errorMessage: string = err instanceof Error ? err.message : 'An error occurred';
-      return { success: false, error: errorMessage };
+      const msg = err instanceof Error ? err.message : 'An error occurred';
+      return { success: false, error: msg };
     }
   };
 
-  // Get stored token
+  // --- GET TOKEN ---
   const getToken = async (): Promise<string | null> => {
     try {
       return await AsyncStorage.getItem('userToken');
@@ -272,27 +251,18 @@ const fetchUserIdByEmail = async (email: string): Promise<number | null> => {
     }
   };
 
-  // Get stored user data
+  // --- GET USER DATA ---
   const getUserData = async (): Promise<any | null> => {
     try {
-      const userData: string | null = await AsyncStorage.getItem('userData');
-      return userData ? JSON.parse(userData) : null;
+      const data = await AsyncStorage.getItem('userData');
+      return data ? JSON.parse(data) : null;
     } catch (err) {
       console.error('Error getting user data:', err);
       return null;
     }
   };
 
-  return {
-    login,
-    register,
-    logout,
-    getToken,
-    getUserData,
-    loading,
-    error,
-  };
+  return { login, register, logout, getToken, getUserData, loading, error };
 }
 
-// Explicit default export for compatibility
 export default useAuth;

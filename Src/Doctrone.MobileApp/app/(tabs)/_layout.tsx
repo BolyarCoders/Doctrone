@@ -1,3 +1,4 @@
+import { useFolders } from '@/hooks/getFolders';
 import { router, Stack } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import { Animated, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -8,8 +9,21 @@ const { width } = Dimensions.get('window');
 const SIDEBAR_WIDTH = width * 0.8;
 
 export default function RootLayout() {
+  const { folders, loading, error, refetch } = useFolders();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarAnimation = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current;
+
+  function formatTimeAgo(dateString: string) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diff < 60) return `${diff} seconds ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+    return `${Math.floor(diff / 604800)} week(s) ago`;
+  }
 
   const toggleSidebar = () => {
     const toValue = isSidebarOpen ? -SIDEBAR_WIDTH : 0;
@@ -24,6 +38,14 @@ export default function RootLayout() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Refresh folders when sidebar opens
+  const handleSidebarOpen = () => {
+    if (!isSidebarOpen) {
+      refetch(); // Refresh folders when opening sidebar
+    }
+    toggleSidebar();
+  };
+
   const FolderIcon = ({ size = 22, color = "#13A77C" }) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ marginRight: 12 }}>
       <Path
@@ -32,18 +54,6 @@ export default function RootLayout() {
         fillOpacity="0.1"
         stroke={color}
         strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-
-  const PlusIcon = ({ size = 20, color = "#13A77C" }) => (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={{ marginRight: 12 }}>
-      <Path
-        d="M12 5V19M5 12H19"
-        stroke={color}
-        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -63,14 +73,15 @@ export default function RootLayout() {
           ]}
         >
           <SafeAreaView style={styles.sidebarSafeArea} edges={['top', 'left', 'right']}>
-            {/* Header with gradient */}
+            {/* Header */}
             <View style={styles.sidebarHeader}>
               <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-
-                
-                <Image source={require('../../assets/images/doctrone-logo.png')} style={{ width: 50, height: 50, marginBottom: 8 }} />
-                <Text style={styles.sidebarTitle}>Doctrone</Text>
+                  <Image 
+                    source={require('../../assets/images/doctrone-logo.png')} 
+                    style={{ width: 50, height: 50, marginBottom: 8 }} 
+                  />
+                  <Text style={styles.sidebarTitle}>Doctrone</Text>
                 </View>
                 <Text style={styles.sidebarSubtitle}>AI Health Assistant</Text>
               </View>
@@ -87,53 +98,85 @@ export default function RootLayout() {
               {/* All Prescriptions Section */}
               <View style={styles.allPrescriptionsSection}>
                 <Text style={styles.allPrescriptionsTitle}>All Prescriptions</Text>
-                <Text style={styles.allPrescriptionsSubtitle}>Ask questions about all your medications</Text>
-                <TouchableOpacity style={styles.allPrescriptionsButton} onPress={()=>{[router.navigate('/(tabs)/home'),toggleSidebar()]}}>
+                <Text style={styles.allPrescriptionsSubtitle}>
+                  Ask questions about all your medications
+                </Text>
+                <TouchableOpacity 
+                  style={styles.allPrescriptionsButton} 
+                  onPress={() => {
+                    router.navigate('/(tabs)/home');
+                    toggleSidebar();
+                  }}
+                >
                   <Text style={styles.allPrescriptionsButtonText}>💬 Start Conversation</Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.divider} />
 
-              {/* Active Prescriptions Section */}
+              {/* Individual Prescriptions Section */}
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Individual Prescriptions</Text>
-                <TouchableOpacity style={styles.addButtonContainer}>
+                <TouchableOpacity 
+                  onPress={() => {
+                    router.push('/login/optionsRegister');
+                    toggleSidebar();
+                  }} 
+                  style={styles.addButtonContainer}
+                >
                   <Text style={styles.addButton}>+</Text>
                 </TouchableOpacity>
               </View>
 
-              <Text style={styles.sectionDescription}>Ask questions about specific medications</Text>
+              <Text style={styles.sectionDescription}>
+                Ask questions about specific medications
+              </Text>
 
               <View style={styles.prescriptionsContainer}>
-                <TouchableOpacity onPress={()=>{[router.navigate ('/(tabs)/activePrescription'),(toggleSidebar())]}} style={styles.prescriptionItem}>
-                  <FolderIcon />
-                  <View style={styles.prescriptionTextContainer}>
-                    <Text style={styles.prescriptionName}>Ибопрофен</Text>
-                    <Text style={styles.prescriptionTime}>2 days ago</Text>
-                  </View>
-                </TouchableOpacity>
+                {loading && (
+                  <Text style={styles.loadingText}>Loading folders...</Text>
+                )}
                 
-                <TouchableOpacity style={styles.prescriptionItem}>
-                  <FolderIcon />
-                  <View style={styles.prescriptionTextContainer}>
-                    <Text style={styles.prescriptionName}>Трахизан</Text>
-                    <Text style={styles.prescriptionTime}>5 days ago</Text>
-                  </View>
-                </TouchableOpacity>
+                {error && (
+                  <Text style={styles.errorText}>{error}</Text>
+                )}
                 
-                <TouchableOpacity style={styles.prescriptionItem}>
-                  <FolderIcon />
-                  <View style={styles.prescriptionTextContainer}>
-                    <Text style={styles.prescriptionName}>Стреписилс</Text>
-                    <Text style={styles.prescriptionTime}>1 week ago</Text>
-                  </View>
-                </TouchableOpacity>
+                {!loading && !error && folders.length === 0 && (
+                  <Text style={styles.emptyText}>
+                    No prescriptions yet. Add one to get started!
+                  </Text>
+                )}
+                
+                {!loading && !error && folders.map(folder => (
+                  <TouchableOpacity
+                    key={folder.id}
+                    onPress={() => {
+                      // Navigate with folder data
+                      router.push({
+                        pathname: '/(tabs)/activePrescription',
+                        params: { 
+                          folderId: folder.id, 
+                          folderName: folder.name 
+                        }
+                      });
+                      toggleSidebar();
+                    }}
+                    style={styles.prescriptionItem}
+                  >
+                    <FolderIcon />
+                    <View style={styles.prescriptionTextContainer}>
+                      <Text style={styles.prescriptionName}>{folder.name}</Text>
+                      <Text style={styles.prescriptionTime}>
+                        {formatTimeAgo(folder.created_at)}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
               </View>
               
               <View style={styles.divider} />
               
-              {/* Other Prescriptions Section */}
+              {/* History Section */}
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>History</Text>
               </View>
@@ -167,42 +210,43 @@ export default function RootLayout() {
 
         {/* Main Content */}
         <Stack
-  screenOptions={{
-    headerShown: true,
-    headerTransparent: true, 
-    headerStyle: {
-      backgroundColor: 'transparent',
-    },
-    headerTitleStyle: {
-      fontSize: 18,
-      fontWeight: '700',
-      color: '#fff',
-    },
-    headerLeft: () => (
-      <TouchableOpacity onPress={toggleSidebar} style={styles.menuButton}>
-        <View style={styles.menuIconContainer}>
-          <View style={styles.menuLine} />
-          <View style={styles.menuLine} />
-          <View style={styles.menuLine} />
-        </View>
-      </TouchableOpacity>
-    ),
-       headerRight: () => (
-      <TouchableOpacity onPress={() => {}} style={styles.profileButton}>
-        <Svg width={28} height={28} viewBox="0 0 24 24" fill="none">
-          <Circle cx="12" cy="8" r="4" stroke="#fff" strokeWidth={2} />
-          <Path
-            d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20"
-            stroke="#fff"
-            strokeWidth={2}
-            strokeLinecap="round"
-          />
-        </Svg>
-      </TouchableOpacity>),
-    headerTitle: 'Doctrone AI',
-    headerTitleAlign: 'center',
-  }}
-/>
+          screenOptions={{
+            headerShown: true,
+            headerTransparent: true, 
+            headerStyle: {
+              backgroundColor: 'transparent',
+            },
+            headerTitleStyle: {
+              fontSize: 18,
+              fontWeight: '700',
+              color: '#fff',
+            },
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleSidebarOpen} style={styles.menuButton}>
+                <View style={styles.menuIconContainer}>
+                  <View style={styles.menuLine} />
+                  <View style={styles.menuLine} />
+                  <View style={styles.menuLine} />
+                </View>
+              </TouchableOpacity>
+            ),
+            headerRight: () => (
+              <TouchableOpacity onPress={() => {}} style={styles.profileButton}>
+                <Svg width={28} height={28} viewBox="0 0 24 24" fill="none">
+                  <Circle cx="12" cy="8" r="4" stroke="#fff" strokeWidth={2} />
+                  <Path
+                    d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20"
+                    stroke="#fff"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                  />
+                </Svg>
+              </TouchableOpacity>
+            ),
+            headerTitle: 'Doctrone AI',
+            headerTitleAlign: 'center',
+          }}
+        />
       </View>
     </SafeAreaProvider>
   );
@@ -323,26 +367,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     letterSpacing: 0.3,
   },
-  newChatButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#13A77C',
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    marginHorizontal: 16,
-    borderRadius: 12,
-    shadowColor: '#13A77C',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  newChatText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    letterSpacing: 0.3,
-  },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -405,6 +429,25 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#9CA3AF',
   },
+  loadingText: {
+    padding: 16,
+    textAlign: 'center',
+    color: '#6B7280',
+    fontSize: 14,
+  },
+  errorText: {
+    padding: 16,
+    textAlign: 'center',
+    color: '#EF4444',
+    fontSize: 14,
+  },
+  emptyText: {
+    padding: 16,
+    textAlign: 'center',
+    color: '#9CA3AF',
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
   historyItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -412,7 +455,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     marginHorizontal: 12,
-    marginBottom:50,
+    marginBottom: 50,
     borderRadius: 10,
     backgroundColor: '#F9FAFB',
   },
@@ -456,10 +499,9 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   profileButton: {
-  width: 44,
-  height: 44,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
