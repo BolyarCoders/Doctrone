@@ -88,7 +88,6 @@ def new_chat():
 
     return jsonify({"chat_id": chat_id, "response": response_text})
 
-
 @app.post("/chat")
 def continue_chat():
     data = request.json
@@ -116,7 +115,6 @@ def continue_chat():
     print(f"AI: {response_text}")
 
     return jsonify({"chat_id": chat_id, "response": response_text})
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

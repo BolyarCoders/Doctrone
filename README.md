@@ -23,7 +23,7 @@ The system analyzes their stored medical data — such as prescriptions, age, bl
 | Component     | Technology       | Description                                                                                  |
 | ------------- | ---------------- | -------------------------------------------------------------------------------------------- |
 | **Main API**  | C# (.NET)        | Handles authentication, user management, and database communication.                         |
-| **AI Server** | Python (FastAPI) | Processes chat requests, integrates with AI models, and fetches contextual data from the DB. |
+| **AI Server** | Python (Flask)   | Processes chat requests, integrates with AI models, and fetches contextual data from the DB. |
 | **Database**  | PostgreSQL       | Stores all user, prescription, and chat data. Shared between the APIs.                       |
 
 ## 2. Frontend Interfaces
@@ -93,7 +93,7 @@ The PostgreSQL schema includes 6 main entities:
 # Tech Stack Summary
 | Layer            | Technology                                 |
 | ---------------- | ------------------------------------------ |
-| Backend          | .NET (C#), Python (FastAPI)                |
+| Backend          | .NET (C#), Python (Flask)                  |
 | Frontend         | React, React Native, Vite                  |
 | Database         | PostgreSQL                                 |
 | ORM / Migrations | Entity Framework                           |
