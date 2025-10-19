@@ -53,32 +53,32 @@ The PostgreSQL schema includes 6 main entities:
 - npm / yarn
 
 ## Installation & Start
-`# Clone repository`
-`git clone https://github.com/BolyarCoders/Doctrone.git`
-`cd Src`
+`# Clone repository`  
+`git clone https://github.com/BolyarCoders/Doctrone.git`  
+`cd Src`  
 
-`# Install main API dependencies`
-`cd Doctrone.Api/DoctrroneAPI`
-`dotnet restore`
-`dotnet run`
+`# Install main API dependencies`  
+`cd Doctrone.Api/DoctrroneAPI`   
+`dotnet restore`   
+`dotnet run`   
 
-`# Install AI server dependencies`
-`cd Doctrone.AI`
-`pip install -r requirements.txt`
-`python main.py`
+`# Install AI server dependencies`    
+`cd Doctrone.AI`    
+`pip install -r requirements.txt`   
+`python main.py`  
 
-`# Install web app dependencies`
-`cd Doctrone.Website/react-app`
-`npm install`
-`npm run dev`
+`# Install web app dependencies`   
+`cd Doctrone.Website/react-app`   
+`npm install`   
+`npm run dev`    
 
-`# Install mobile app dependencies`
-`cd Doctrone.MobileApp`
-`# You need to install the expo-cli dependency and install their mobile app 'Expo Go' from Google Play Store & Apple Store`
-`npm install -g expo-cli`
-`npm install`
-`npx expo start`
-`# Follow the instructions given in the cli in order to run the Doctrone App on your phone`
+`# Install mobile app dependencies`    
+`cd Doctrone.MobileApp`   
+`# You need to install the expo-cli dependency and install their mobile app 'Expo Go' from Google Play Store & Apple Store`   
+`npm install -g expo-cli`  
+`npm install`   
+`npx expo start`   
+`# Follow the instructions given in the cli in order to run the Doctrone App on your phone`   
 
 # Example Flow
 1. User registers and logs into the mobile app (via .NET API).
