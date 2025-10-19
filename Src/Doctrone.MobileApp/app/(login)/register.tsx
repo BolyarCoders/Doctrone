@@ -120,7 +120,7 @@ const Register: React.FC = () => {
 
     if (result.success) {
       Alert.alert('Success', 'Registration successful!', [
-        { text: 'OK', onPress: () => router.push('/login/login') },
+        { text: 'OK', onPress: () => router.push('/(login)/login') },
       ]);
 
       // Reset form

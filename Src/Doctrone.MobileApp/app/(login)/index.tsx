@@ -24,7 +24,7 @@ const Index = () => {
 
         {/* Login Button */}
         <TouchableOpacity
-          onPress={() => router.push('/login/login')}
+          onPress={() => router.push('/(login)/login')}
           activeOpacity={0.8}
           style={styles.button}
         >

@@ -44,15 +44,15 @@ const handleLogin = async (): Promise<void> => {
         if (hasPrescription) {
           router.push('/(tabs)/home');
         } else {
-          router.push('/login/optionsRegister');
+          router.push('/(login)/optionsRegister');
         }
       } catch (error) {
         console.error('Error checking prescription:', error);
         // Default to home on error
-        router.push('/(tabs)/home');
+        router.push('/home');
       }
     } else {
-      router.push('/(tabs)/home');
+      router.push('/home');
     }
   } else {
     Alert.alert('Error', result.error || 'Failed to login');
@@ -136,7 +136,7 @@ const handleLogin = async (): Promise<void> => {
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>Don't have an account? </Text>
             <TouchableOpacity 
-              onPress={() => router.push('/login/register')}
+              onPress={() => router.push('/(login)/register')}
               disabled={loading}
             >
               <Text style={styles.registerLink}>Register</Text>
