@@ -2,9 +2,11 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from supabase import create_client, Client
 
 app = Flask(__name__)
+CORS(app)
 
 # Load .env variables
 load_dotenv()
@@ -43,7 +45,6 @@ def get_user_info(user_id):
     drugs_summary = ", ".join(drugs_info) if drugs_info else "no current medications"
     return drugs_summary, sex, age
 
-
 def get_gemini_response(user_input: str, drugs_summary: str, sex: str, age: str) -> str:
     system_instruction = (
         f"You are DoctroneAI. Your goal is to assist users by providing medical information and advice. "
@@ -57,8 +58,6 @@ def get_gemini_response(user_input: str, drugs_summary: str, sex: str, age: str)
     chat = model.start_chat(history=[{"role": "user", "parts": [system_instruction]}])
     result = chat.send_message({"parts": [user_input]})
     return result.text
-
-
 
 @app.post("/new_chat")
 def new_chat():

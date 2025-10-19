@@ -84,13 +84,21 @@ const Sidebar = ({
 };
 
 // Prompt Bar Component
-const PromptBar = ({ onSend }) => {
+const PromptBar = ({ onSend, disabled }) => {
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (message.trim()) {
-      onSend(message);
-      setMessage("");
+  const handleSend = async () => {
+    if (message.trim() && !isLoading) {
+      setIsLoading(true);
+      try {
+        await onSend(message);
+        setMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -110,9 +118,14 @@ const PromptBar = ({ onSend }) => {
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder="Describe your symptoms..."
+        disabled={isLoading || disabled}
       />
-      <button className="send-btn" onClick={handleSend}>
-        Send
+      <button
+        className="send-btn"
+        onClick={handleSend}
+        disabled={isLoading || disabled || !message.trim()}
+      >
+        {isLoading ? "Sending..." : "Send"}
       </button>
     </div>
   );

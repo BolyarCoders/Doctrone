@@ -278,6 +278,16 @@ namespace DoctrroneAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetFoldersOfUser(int userId)
+        {
+            var response = await _client.GetAsync($"rest/v1/folders?user_id=eq.{userId}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetChats()
         {
             var response = await _client.GetAsync("rest/v1/chats");
@@ -285,11 +295,20 @@ namespace DoctrroneAPI.Controllers
             var json = await response.Content.ReadAsStringAsync();
             return Content(json, "application/json");
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetChatsOfUser(int folderId)
+        {
+            var response = await _client.GetAsync($"rest/v1/chats?folder_id=eq.{folderId}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return Content(json, "application/json");
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetMessages()
+        public async Task<IActionResult> GetMessagesOfUser(int chatId)
         {
-            var response = await _client.GetAsync("rest/v1/messages");
+            var response = await _client.GetAsync($"rest/v1/messages?chat_id=eq.{chatId}");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return Content(json, "application/json");
