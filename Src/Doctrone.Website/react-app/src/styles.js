@@ -165,6 +165,8 @@ p { font-size: var(--p); }
     position: fixed;
     height: 100vh;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar.collapsed {
@@ -180,16 +182,14 @@ p { font-size: var(--p); }
 }
 
 .sidebar-logo {
-    width: 40px;
-    height: 40px;
-    background: var(--accent-colour);
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 20px;
+}
+
+.sidebar-logo img {
+    width: 40px;
+    height: auto;
 }
 
 .sidebar-toggle {
@@ -200,6 +200,145 @@ p { font-size: var(--p); }
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.folder-section {
+    margin-bottom: 1rem;
+}
+
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--primary-colour);
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.folder-header:hover {
+    opacity: 0.8;
+}
+
+.folder-name {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.folder-toggle {
+    font-size: 12px;
+}
+
+.folder-chats {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-folder-btn {
+    width: 100%;
+    background: transparent;
+    border: 2px dashed var(--border-color);
+    color: var(--secondary-colour);
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 1rem;
+    transition: border-color 0.2s;
+}
+
+.add-folder-btn:hover {
+    border-color: var(--accent-colour);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid var(--border-color);
+}
+
+.modal h3 {
+    margin-bottom: 1.5rem;
+    font-size: var(--h5);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.modal-btn.primary {
+    background: var(--accent-colour);
+    color: white;
+}
+
+.modal-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--secondary-colour);
+}
+
+.chat-item-actions {
+    display: flex;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.prescription-item:hover .chat-item-actions {
+    opacity: 1;
+}
+
+.chat-action-btn {
+    background: transparent;
+    border: none;
+    color: var(--secondary-colour);
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.chat-action-btn:hover {
+    opacity: 1;
 }
 
 .sidebar-section {

@@ -85,7 +85,7 @@ const Landing = () => {
 
   return (
     <div className="landing">
-      <h1 className="landing-header">Syndrome Diagnosis Assistant</h1>
+      <h1 className="landing-header">Doctrone</h1>
       <p className="landing-description">
         Your intelligent companion for understanding symptoms, diagnosing
         syndromes, and receiving personalized health feedback. Get started by

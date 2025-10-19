@@ -10,6 +10,8 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
     gender: "",
     specialDiagnosis: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -18,14 +20,67 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onRegister(formData);
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://doctroneapi.onrender.com/Doctrone/Register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            pass: formData.password,
+            bloodType: formData.bloodType,
+            age: parseInt(formData.age),
+            gender: formData.gender,
+            specialDiagnosis: formData.specialDiagnosis || "None",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || "Registration failed. Please try again."
+        );
+      }
+
+      const data = await response.json();
+
+      // Pass the email to fetch full user data
+      onRegister({ email: formData.email });
+    } catch (err) {
+      setError(err.message || "An error occurred during registration.");
+      console.error("Registration error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="auth-form">
       <h2 style={{ marginBottom: "1.5rem" }}>Register</h2>
+      {error && (
+        <div
+          style={{
+            background: "#ff4444",
+            color: "white",
+            padding: "0.75rem",
+            borderRadius: "6px",
+            marginBottom: "1rem",
+            fontSize: "14px",
+          }}
+        >
+          {error}
+        </div>
+      )}
       <div className="form-group">
         <label>Full Name</label>
         <input
@@ -35,6 +90,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
           onChange={handleChange}
           placeholder="John Doe"
           required
+          disabled={isLoading}
         />
       </div>
       <div className="form-group">
@@ -46,6 +102,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
           onChange={handleChange}
           placeholder="your@email.com"
           required
+          disabled={isLoading}
         />
       </div>
       <div className="form-group">
@@ -57,6 +114,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
           onChange={handleChange}
           placeholder="••••••••"
           required
+          disabled={isLoading}
         />
       </div>
       <div className="form-row">
@@ -67,6 +125,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
             value={formData.bloodType}
             onChange={handleChange}
             required
+            disabled={isLoading}
           >
             <option value="">Select</option>
             <option value="A+">A+</option>
@@ -90,6 +149,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
             min="1"
             max="120"
             required
+            disabled={isLoading}
           />
         </div>
       </div>
@@ -100,6 +160,7 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
           value={formData.gender}
           onChange={handleChange}
           required
+          disabled={isLoading}
         >
           <option value="">Select</option>
           <option value="Male">Male</option>
@@ -116,10 +177,24 @@ const RegisterForm = ({ onRegister, onToggleForm }) => {
           value={formData.specialDiagnosis}
           onChange={handleChange}
           placeholder="e.g., Diabetes, Hypertension"
+          disabled={isLoading}
         />
       </div>
-      <button type="button" className="btn" onClick={handleSubmit}>
-        Register
+      <button
+        type="button"
+        className="btn"
+        onClick={handleSubmit}
+        disabled={
+          isLoading ||
+          !formData.name ||
+          !formData.email ||
+          !formData.password ||
+          !formData.bloodType ||
+          !formData.age ||
+          !formData.gender
+        }
+      >
+        {isLoading ? "Registering..." : "Register"}
       </button>
       <div className="auth-toggle">
         Already have an account?{" "}
