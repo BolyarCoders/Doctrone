@@ -7,157 +7,62 @@ import logo from "../assets/doctrone-logo.png";
 const Dashboard = () => {
   const { setCurrentPage, user } = useAppContext();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedPrescriptionId, setSelectedPrescriptionId] = useState(null);
+  const [prescriptions, setPrescriptions] = useState([]);
   const [folders, setFolders] = useState([]);
+  const [defaultFolderId, setDefaultFolderId] = useState(null);
   const [isLoadingResponse, setIsLoadingResponse] = useState(false);
-  const [showFolderModal, setShowFolderModal] = useState(false);
-  const [showChatModal, setShowChatModal] = useState(false);
-  const [newFolderName, setNewFolderName] = useState("");
-  const [selectedFolderId, setSelectedFolderId] = useState(null);
-  const [isLoadingFolders, setIsLoadingFolders] = useState(true);
 
-  // Load folders on mount
+  const selectedPrescription = prescriptions.find(
+    (p) => p.id === selectedPrescriptionId
+  );
+
   useEffect(() => {
-    if (user?.id) {
-      loadFolders();
+    // Initialize default folder on mount
+    if (folders.length === 0) {
+      const defaultFolder = { id: "default", name: "Default Folder" };
+      setFolders([defaultFolder]);
+      setDefaultFolderId(defaultFolder.id);
     }
-  }, [user?.id]);
-
-  const loadFolders = async () => {
-    if (!user?.id) return;
-    setIsLoadingFolders(true);
-
-    try {
-      const response = await fetch(
-        `https://doctroneapi.onrender.com/Doctrone/GetFoldersOfUser?userId=${user.id}`,
-        { method: "GET", headers: { "Content-Type": "application/json" } }
-      );
-
-      if (response.ok) {
-        const foldersData = await response.json();
-
-        const foldersWithChats = await Promise.all(
-          foldersData.map(async (folder) => {
-            try {
-              const chatsResponse = await fetch(
-                `https://doctroneapi.onrender.com/Doctrone/GetChatOfUser?folderId=${folder.id}`,
-                {
-                  method: "GET",
-                  headers: { "Content-Type": "application/json" },
-                }
-              );
-
-              if (chatsResponse.ok) {
-                const chats = await chatsResponse.json();
-                return { ...folder, chats: chats || [] };
-              }
-            } catch (err) {
-              console.error(
-                `Error loading chats for folder ${folder.id}:`,
-                err
-              );
-            }
-            return { ...folder, chats: [] };
-          })
-        );
-
-        setFolders(foldersWithChats);
-      }
-    } catch (error) {
-      console.error("Error loading folders:", error);
-    } finally {
-      setIsLoadingFolders(false);
-    }
-  };
-
-  const handleCreateFolder = async () => {
-    if (!newFolderName.trim() || !user?.id) return;
-
-    try {
-      const response = await fetch(
-        "https://doctroneapi.onrender.com/Doctrone/AddFolder",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.id,
-            name: newFolderName,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        setNewFolderName("");
-        setShowFolderModal(false);
-        await loadFolders();
-      }
-    } catch (error) {
-      console.error("Error creating folder:", error);
-    }
-  };
+  }, []);
 
   const handleNewChat = () => {
-    if (folders.length === 0) {
-      alert("Please create a folder first!");
-      setShowFolderModal(true);
-      return;
-    }
-    setShowChatModal(true);
-    setSelectedFolderId(folders[0]?.id);
+    const newId = Date.now();
+    const newPrescription = {
+      id: newId,
+      title: `New Consultation ${prescriptions.length + 1}`,
+      folderId: defaultFolderId,
+      status: "active",
+      messages: [],
+    };
+    setPrescriptions([newPrescription, ...prescriptions]);
+    setSelectedPrescriptionId(newId);
   };
 
-  const handleCreateChat = async () => {
-    if (!selectedFolderId || !user?.id) return;
+  const handleCreateFolder = () => {
+    const folderName = prompt("Enter new folder name:");
+    if (!folderName?.trim()) return;
 
-    const autoTitle = `Chat ${new Date().toLocaleString()}`;
-
-    try {
-      const response = await fetch(
-        "https://doctroneapi.onrender.com/Doctrone/AddChat",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.id,
-            title: autoTitle,
-            folderId: selectedFolderId,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const newChat = await response.json();
-        setShowChatModal(false);
-        await loadFolders();
-
-        if (newChat.id || newChat.chatId) {
-          setSelectedChat({
-            id: newChat.id || newChat.chatId,
-            title: autoTitle,
-            messages: [],
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error creating chat:", error);
-    }
-  };
-
-  const handleSelectChat = (chat) => {
-    setSelectedChat({ ...chat, messages: chat.messages || [] });
+    const newFolder = { id: Date.now(), name: folderName };
+    setFolders((prev) => [...prev, newFolder]);
   };
 
   const handleSendMessage = async (message) => {
-    if (!user?.id || !selectedChat) {
-      console.error("No user ID or chat selected");
+    if (!user?.id) {
+      console.error("No user ID available");
       return;
     }
 
     const userMessage = { role: "user", content: message };
-    setSelectedChat((prev) => ({
-      ...prev,
-      messages: [...(prev.messages || []), userMessage],
-    }));
+
+    // Add userMessage once
+    setPrescriptions((prev) =>
+      prev.map((p) =>
+        p.id === selectedPrescriptionId
+          ? { ...p, messages: [...p.messages, userMessage] }
+          : p
+      )
+    );
 
     setIsLoadingResponse(true);
 
@@ -165,39 +70,42 @@ const Dashboard = () => {
       const response = await fetch("https://doctrone.onrender.com/new_chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: message,
-          user_id: user.id,
-        }),
+        body: JSON.stringify({ message, user_id: user.id }),
       });
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`API error: ${response.status}`);
 
       const data = await response.json();
       const assistantMessage = {
         role: "assistant",
-        content:
-          data.response || "I received your message but got an empty response.",
+        content: data.response || "No response received.",
       };
 
-      setSelectedChat((prev) => ({
-        ...prev,
-        chat_id: data.chat_id || prev.chat_id,
-        messages: [...(prev.messages || []), userMessage, assistantMessage],
-      }));
+      // Only append assistantMessage
+      setPrescriptions((prev) =>
+        prev.map((p) =>
+          p.id === selectedPrescriptionId
+            ? {
+                ...p,
+                chat_id: data.chat_id || p.chat_id,
+                messages: [...p.messages, assistantMessage],
+              }
+            : p
+        )
+      );
     } catch (error) {
       console.error("Error calling API:", error);
       const errorMessage = {
         role: "assistant",
         content: "Sorry, I encountered an error. Please try again later.",
       };
-
-      setSelectedChat((prev) => ({
-        ...prev,
-        messages: [...(prev.messages || []), userMessage, errorMessage],
-      }));
+      setPrescriptions((prev) =>
+        prev.map((p) =>
+          p.id === selectedPrescriptionId
+            ? { ...p, messages: [...p.messages, errorMessage] }
+            : p
+        )
+      );
     } finally {
       setIsLoadingResponse(false);
     }
@@ -208,12 +116,12 @@ const Dashboard = () => {
       <Sidebar
         isCollapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+        prescriptions={prescriptions}
         folders={folders}
-        selectedChatId={selectedChat?.id}
-        onSelectChat={handleSelectChat}
+        selectedId={selectedPrescriptionId}
+        onSelect={setSelectedPrescriptionId}
         onNewChat={handleNewChat}
         onCreateFolder={handleCreateFolder}
-        logo={logo}
       />
 
       <div className={`main-content ${sidebarCollapsed ? "expanded" : ""}`}>
@@ -237,11 +145,13 @@ const Dashboard = () => {
         </div>
 
         <div className="conversation-container">
-          {selectedChat ? (
+          {selectedPrescription ? (
             <div className="conversation">
-              <h2 className="conversation-header">{selectedChat.title}</h2>
-              {selectedChat.messages.length > 0 ? (
-                selectedChat.messages.map((msg, idx) => (
+              <h2 className="conversation-header">
+                {selectedPrescription.title}
+              </h2>
+              {selectedPrescription.messages.length > 0 ? (
+                selectedPrescription.messages.map((msg, idx) => (
                   <div key={idx} className={`message ${msg.role}`}>
                     <div className="message-role">
                       {msg.role === "user" ? "You" : "Assistant"}

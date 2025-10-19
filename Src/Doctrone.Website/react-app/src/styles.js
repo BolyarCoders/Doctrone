@@ -254,7 +254,6 @@ p { font-size: var(--p); }
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 1rem;
     transition: border-color 0.2s;
 }
 
@@ -660,5 +659,66 @@ p { font-size: var(--p); }
     color: var(--secondary-colour);
     opacity: 0.7;
 }
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.new-chat-btn,
+.add-folder-btn {
+    background: var(--accent-colour);
+    border: none;
+    color: white;
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 0.25rem;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.new-chat-btn:hover,
+.add-folder-btn:hover {
+    opacity: 0.9;
+    background: var(--primary-gradient-colour);
+}
+
+/* Folders Section */
+.folder-section {
+    margin-bottom: 1rem;
+}
+
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    background: var(--primary-colour);
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--secondary-colour);
+    transition: opacity 0.2s;
+}
+
+.folder-header:hover {
+    opacity: 0.8;
+}
+
+/* Text under folders */
+.folder-all-chats {
+    font-size: 12px;
+    color: var(--secondary-colour);
+    opacity: 0.7;
+    margin-left: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
 `;
 export default styles;
