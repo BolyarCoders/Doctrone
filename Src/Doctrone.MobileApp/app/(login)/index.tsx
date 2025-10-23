@@ -1,10 +1,8 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 const Index = () => {
   const router = useRouter();
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
