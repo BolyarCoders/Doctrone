@@ -399,6 +399,28 @@
         }
       }
     },
+    "/Doctrone/GetFoldersOfUser": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Doctrone/GetChats": {
       "get": {
         "tags": [
@@ -411,10 +433,42 @@
         }
       }
     },
-    "/Doctrone/GetMessages": {
+    "/Doctrone/GetChatsOfUser": {
       "get": {
         "tags": [
           "Doctrone"
+        ],
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/Doctrone/GetMessagesOfUser": {
+      "get": {
+        "tags": [
+          "Doctrone"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {

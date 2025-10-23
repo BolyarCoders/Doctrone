@@ -1,3 +1,8 @@
+# VS Code settings directory
 .vscode/
-/Doctrone.AI/.venv/
-/Doctrone.AI/.env/
+
+# Python virtual environment
+.venv/
+
+# Environment variables file
+.env

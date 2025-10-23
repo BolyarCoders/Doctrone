@@ -60,7 +60,7 @@
               "RelativeDocumentMoniker": "DoctrroneAPI\\Controllers\\DoctroneController.cs",
               "ToolTip": "C:\\Users\\merte\\Documents\\GitHub\\Doctrone\\Src\\Doctrone.Api\\DoctrroneAPI\\DoctrroneAPI\\Controllers\\DoctroneController.cs",
               "RelativeToolTip": "DoctrroneAPI\\Controllers\\DoctroneController.cs",
-              "ViewState": "AgIAACABAAAAAAAAAAAuwDQBAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAEIBAAAAAAAAAAAlwEsBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T08:05:20.557Z",
               "EditorCaption": ""
@@ -75,8 +75,7 @@
               "RelativeToolTip": "DoctrroneAPI\\Models\\Message.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T08:04:40.466Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T08:04:40.466Z"
             },
             {
               "$type": "Document",
@@ -136,8 +135,7 @@
               "RelativeToolTip": "DoctrroneAPI\\Models\\Prescriptions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T07:56:06.784Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T07:56:06.784Z"
             },
             {
               "$type": "Document",
